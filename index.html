@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgenticTravel - What we accomplished in 48 hours</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.4;
+            color: #000;
+            background: #f5f5f5;
+            padding: 2vh 2vw;
+            overflow: hidden;
+            height: 100vh;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        .container {
+            max-width: 1400px;
+            height: 100%;
+            margin: 0 auto;
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            padding-top: 3vh;
+        }
+
+        .logo-container {
+            position: fixed;
+            top: 3vh;
+            left: 2rem;
+            z-index: 100;
+            background: white;
+            padding: 0.4rem 1rem;
+            border-radius: 30px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transform: translateY(calc(clamp(2rem, 4vw, 3rem) * 0.57 + 2px));
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+
+        .logo-container:hover {
+            transform: translateY(calc(clamp(2rem, 4vw, 3rem) * 0.57 + 2px)) scale(1.03);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
+        }
+
+        .logo-container img {
+            width: 24px;
+            height: 24px;
+        }
+
+        .logo-container span {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #000;
+        }
+
+        h1 {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 3vh;
+            color: #000;
+        }
+
+        .content-grid {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        .card {
+            background: white;
+            padding: 1.2rem 1.4rem 1.4rem 1.4rem;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+            overflow: visible;
+            position: absolute;
+            max-width: 280px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: scale(1.02);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
+        }
+
+        .card-design:hover {
+            transform: translateY(-50%) scale(1.02);
+        }
+
+        .card-blockchain:hover {
+            transform: translateY(-50%) scale(1.02);
+        }
+
+        .card-ai:hover {
+            transform: translateX(-50%) scale(1.02);
+        }
+
+        /* Location pin pointer */
+        .card::after {
+            content: '';
+            position: absolute;
+            bottom: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 12px solid transparent;
+            border-right: 12px solid transparent;
+            border-top: 12px solid white;
+            filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+        }
+
+        .card-tag {
+            display: block;
+            background: #7ec8f5;
+            color: white;
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: clamp(0.7rem, 1.2vw, 0.8rem);
+            font-weight: 600;
+            margin-bottom: 1rem;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15), 0 0 25px rgba(126, 200, 245, 0.5);
+            text-align: center;
+            width: fit-content;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card-tag:hover {
+            transform: scale(1.03);
+            box-shadow: 0 10px 28px rgba(0, 0, 0, 0.2), 0 0 30px rgba(126, 200, 245, 0.6);
+        }
+
+        .card h2 {
+            font-size: clamp(0.95rem, 1.8vw, 1.1rem);
+            font-weight: 600;
+            margin-bottom: 0.8rem;
+            color: #000;
+            line-height: 1.3;
+        }
+
+        .card ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .card li {
+            font-size: clamp(0.75rem, 1.3vw, 0.85rem);
+            margin-bottom: 0.4rem;
+            padding-left: 1rem;
+            position: relative;
+            color: #000;
+            line-height: 1.4;
+        }
+
+        .card li:last-child {
+            margin-bottom: 0;
+        }
+
+        .card li::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+
+        .card-ai {
+            top: 5vh;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .card-design {
+            left: 8vw;
+            top: 50%;
+            transform: translateY(-50%);
+            max-width: 320px;
+        }
+
+        .card-blockchain {
+            right: 8vw;
+            top: 50%;
+            transform: translateY(-50%);
+            max-width: 320px;
+        }
+
+        .note {
+            position: absolute;
+            top: 0.7rem;
+            right: 0.7rem;
+            font-size: clamp(0.65rem, 1.1vw, 0.75rem);
+            max-width: 180px;
+            text-align: right;
+            line-height: 1.2;
+        }
+
+        .note::before {
+            content: "•";
+            margin-right: 0.3rem;
+            font-size: 0.8em;
+        }
+
+        /* Earth 3D Styles */
+        .earth3d-container {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            z-index: 1;
+            transition: transform 0.5s ease-in-out;
+            overflow: visible;
+            pointer-events: none;
+        }
+
+        .earth3d-center {
+            transform: translateX(0);
+        }
+
+        .earth3d-right {
+            transform: translateX(25%) translateY(18%);
+        }
+
+        #earth-canvas {
+            width: 100%;
+            height: 100%;
+            pointer-events: auto !important;
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            cursor: default;
+        }
+
+        #earth-canvas.grab-cursor {
+            cursor: grab !important;
+            cursor: -webkit-grab !important;
+            cursor: -moz-grab !important;
+        }
+
+        #earth-canvas.grabbing-cursor {
+            cursor: grabbing !important;
+            cursor: -webkit-grabbing !important;
+            cursor: -moz-grabbing !important;
+        }
+
+        @media (max-width: 968px) {
+            .logo-container {
+                top: 2vh;
+                left: 1rem;
+                padding: 0.3rem 0.8rem;
+            }
+
+            .logo-container img {
+                width: 20px;
+                height: 20px;
+            }
+
+            .logo-container span {
+                font-size: 0.85rem;
+            }
+
+            h1 {
+                font-size: 2.5rem;
+            }
+
+            .content-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .card-ai,
+            .card-design,
+            .card-blockchain {
+                grid-column: 1;
+                grid-row: auto;
+            }
+
+            .note {
+                position: static;
+                text-align: left;
+                margin-bottom: 1rem;
+                max-width: 100%;
+            }
+
+            .earth3d-container {
+                height: 50vh;
+            }
+
+            .earth3d-right {
+                transform: translateX(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="logo-container">
+        <img src="logo.svg" alt="AgenticTravel Logo">
+        <span>AgenticTravel</span>
+    </div>
+
+    <div class="earth3d-container earth3d-center">
+        <canvas id="earth-canvas"></canvas>
+    </div>
+
+    <div class="container">
+        <h1>What we accomplished in 48 hours</h1>
+
+        <div class="content-grid">
+            <div class="card card-ai">
+                <div class="card-tag">Spec-driven with Claude</div>
+                <h2>AI & Intelligence:</h2>
+                <ul>
+                    <li>Travel agent with temporal user memory</li>
+                    <li>Persistent memory system</li>
+                    <li>Multi-model LLM interaction capabilities</li>
+                </ul>
+            </div>
+
+            <div class="card card-design">
+                <div class="card-tag">Made with Claude</div>
+                <h2>Design & UI - Built from scratch:</h2>
+                <ul>
+                    <li>Animated 3D world globe with connecting lines</li>
+                    <li>Custom stylized 3D Google Maps integration</li>
+                    <li>Complete overlay controls design system</li>
+                    <li>Corporate design and logo</li>
+                </ul>
+            </div>
+
+            <div class="card card-blockchain">
+                <div class="card-tag">Built with Web3/X402</div>
+                <h2>Blockchain & Web3 Integration:</h2>
+                <ul>
+                    <li>Web3 integration with managed wallets</li>
+                    <li>Gasless transactions implementation</li>
+                    <li>Self-paying APIs using ILP/X402 protocol</li>
+                    <li>Tapped into faucet wallets to obtain test crypto tokens for development</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+            "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+        }
+    }
+    </script>
+
+    <script type="module">
+        import * as THREE from 'three';
+
+        const EARTH_RADIUS = 13;
+        const canvas = document.getElementById('earth-canvas');
+
+        // Scene setup
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.set(0, 0, 22);
+
+        const renderer = new THREE.WebGLRenderer({
+            canvas: canvas,
+            antialias: true,
+            alpha: true
+        });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(window.devicePixelRatio);
+
+        // Lighting
+        const ambientLight = new THREE.AmbientLight(0xffffff, 1.5);
+        scene.add(ambientLight);
+
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 3);
+        directionalLight.position.set(15, 3, 5);
+        scene.add(directionalLight);
+
+        // Earth group - positioned to cut off at bottom
+        const earthGroup = new THREE.Group();
+        earthGroup.position.set(0, -9, 0);
+        scene.add(earthGroup);
+
+        // Create Earth sphere
+        const earthGeometry = new THREE.SphereGeometry(EARTH_RADIUS, 64, 64);
+        const textureLoader = new THREE.TextureLoader();
+
+        // Load earth texture
+        const earthMaterial = new THREE.MeshStandardMaterial({
+            color: 0x2233ff, // Fallback color
+            roughness: 0.8,
+            metalness: 0.2,
+            emissive: 0x112244,
+            emissiveIntensity: 0.3
+        });
+
+        const earthMesh = new THREE.Mesh(earthGeometry, earthMaterial);
+        earthGroup.add(earthMesh);
+
+        // Load texture asynchronously
+        textureLoader.load(
+            '1_earth_16k-BLmgUlJ6.jpg',
+            // Success callback
+            (texture) => {
+                console.log('Texture loaded successfully');
+                earthMaterial.map = texture;
+                earthMaterial.color = new THREE.Color(0xffffff); // Reset to white to show texture
+                earthMaterial.needsUpdate = true;
+            },
+            // Progress callback
+            (progress) => {
+                console.log('Loading texture...', progress);
+            },
+            // Error callback
+            (error) => {
+                console.error('Error loading texture:', error);
+                console.log('Using fallback blue color');
+            }
+        );
+
+        // Flight routes data
+        const flightRoutes = [
+            { from: { lat: 40.7128, lng: -74.006 }, to: { lat: 51.5074, lng: -0.1278 }, color: "#50c8ff" },
+            { from: { lat: 42.3601, lng: -71.0589 }, to: { lat: 48.8566, lng: 2.3522 }, color: "#a78bfa" },
+            { from: { lat: 25.7617, lng: -80.1918 }, to: { lat: 40.4168, lng: -3.7038 }, color: "#f472b6" },
+            { from: { lat: 35.6762, lng: 139.6503 }, to: { lat: 37.7749, lng: -122.4194 }, color: "#ff6b6b" },
+            { from: { lat: 37.5665, lng: 126.978 }, to: { lat: 33.9425, lng: -118.408 }, color: "#fb923c" },
+            { from: { lat: 22.3193, lng: 114.1694 }, to: { lat: 49.2827, lng: -123.1207 }, color: "#fbbf24" },
+            { from: { lat: 1.3521, lng: 103.8198 }, to: { lat: 48.8566, lng: 2.3522 }, color: "#4ecdc4" },
+            { from: { lat: 55.7558, lng: 37.6173 }, to: { lat: 22.3193, lng: 114.1694 }, color: "#95e1d3" },
+            { from: { lat: 52.52, lng: 13.405 }, to: { lat: 31.2304, lng: 121.4737 }, color: "#67e8f9" },
+            { from: { lat: 41.9028, lng: 12.4964 }, to: { lat: 35.6762, lng: 139.6503 }, color: "#c4b5fd" },
+            { from: { lat: -33.8688, lng: 151.2093 }, to: { lat: 25.2048, lng: 55.2708 }, color: "#ffe66d" },
+            { from: { lat: 25.2048, lng: 55.2708 }, to: { lat: 51.5074, lng: -0.1278 }, color: "#fcd34d" },
+            { from: { lat: 25.2048, lng: 55.2708 }, to: { lat: 40.7128, lng: -74.006 }, color: "#fdba74" },
+            { from: { lat: -23.5505, lng: -46.6333 }, to: { lat: 40.4168, lng: -3.7038 }, color: "#86efac" },
+            { from: { lat: -34.6037, lng: -58.3816 }, to: { lat: 41.9028, lng: 12.4964 }, color: "#6ee7b7" },
+            { from: { lat: -33.4489, lng: -70.6693 }, to: { lat: -33.8688, lng: 151.2093 }, color: "#5eead4" },
+            { from: { lat: -33.9249, lng: 18.4241 }, to: { lat: 51.5074, lng: -0.1278 }, color: "#f9a8d4" },
+            { from: { lat: 30.0444, lng: 31.2357 }, to: { lat: 52.52, lng: 13.405 }, color: "#f0abfc" },
+            { from: { lat: 13.7563, lng: 100.5018 }, to: { lat: 35.6762, lng: 139.6503 }, color: "#7dd3fc" },
+            { from: { lat: 28.6139, lng: 77.209 }, to: { lat: 1.3521, lng: 103.8198 }, color: "#93c5fd" },
+
+            // Equatorial routes - around the middle of the sphere
+            { from: { lat: 1.3521, lng: 103.8198 }, to: { lat: -1.2864, lng: 36.8172 }, color: "#fca5a5" },  // Singapore to Nairobi
+            { from: { lat: -0.1807, lng: -78.4678 }, to: { lat: 1.3521, lng: 103.8198 }, color: "#fdba74" }, // Quito to Singapore
+            { from: { lat: -1.2864, lng: 36.8172 }, to: { lat: 4.7110, lng: -74.0721 }, color: "#fde047" },  // Nairobi to Bogota
+            { from: { lat: -6.2088, lng: 106.8456 }, to: { lat: -0.1807, lng: -78.4678 }, color: "#a7f3d0" }, // Jakarta to Quito
+            { from: { lat: 3.1390, lng: 101.6869 }, to: { lat: -6.2088, lng: 106.8456 }, color: "#bae6fd" },  // Kuala Lumpur to Jakarta
+            { from: { lat: 4.7110, lng: -74.0721 }, to: { lat: -15.7975, lng: -47.8919 }, color: "#c7d2fe" }  // Bogota to Brasilia
+        ];
+
+        // Convert lat/lng to 3D position on sphere
+        function latLngToVector3(lat, lng, radius) {
+            const phi = (90 - lat) * (Math.PI / 180);
+            const theta = (lng + 180) * (Math.PI / 180);
+
+            const x = -radius * Math.sin(phi) * Math.cos(theta);
+            const y = radius * Math.cos(phi);
+            const z = radius * Math.sin(phi) * Math.sin(theta);
+
+            return new THREE.Vector3(x, y, z);
+        }
+
+        // Generate arc points between two locations
+        function generateArcPoints(start, end, altitude, segments = 100) {
+            const startVec = latLngToVector3(start.lat, start.lng, EARTH_RADIUS);
+            const endVec = latLngToVector3(end.lat, end.lng, EARTH_RADIUS);
+
+            const points = [];
+
+            // Normalize vectors for proper spherical interpolation
+            const startNorm = startVec.clone().normalize();
+            const endNorm = endVec.clone().normalize();
+
+            for (let i = 0; i <= segments; i++) {
+                const t = i / segments;
+
+                // Use spherical linear interpolation (slerp) for smooth curves
+                const point = new THREE.Vector3();
+                point.lerpVectors(startNorm, endNorm, t);
+                point.normalize();
+
+                // Lines touch the surface at start and end, arc above in between
+                const altitudeFactor = 1 + altitude * Math.sin(t * Math.PI);
+                point.multiplyScalar(EARTH_RADIUS * altitudeFactor);
+
+                points.push(point);
+            }
+
+            return points;
+        }
+
+        // Flight path class
+        class FlightPath {
+            constructor(from, to, color, startDelay, pauseDuration, speed) {
+                this.allPoints = generateArcPoints(from, to, 0.18, 50);
+                this.color = color;
+                this.startDelay = startDelay;
+                this.pauseDuration = pauseDuration;
+                this.speed = speed;
+
+                this.progress = 0;
+                this.direction = 1;
+                this.phase = 'initialDelay';
+                this.pauseTimer = 0;
+                this.initialDelayTimer = startDelay;
+
+                // Create line
+                const geometry = new THREE.BufferGeometry().setFromPoints([this.allPoints[0], this.allPoints[0]]);
+
+                // Make colors more vibrant by boosting saturation
+                const lineColor = new THREE.Color(color);
+                lineColor.multiplyScalar(1.3); // Brighten the color
+
+                const material = new THREE.LineBasicMaterial({
+                    color: lineColor,
+                    transparent: true,
+                    opacity: 1.0,
+                    linewidth: 400
+                });
+
+                this.line = new THREE.Line(geometry, material);
+                earthGroup.add(this.line);
+            }
+
+            update(delta) {
+                // Handle initial delay
+                if (this.phase === 'initialDelay') {
+                    this.initialDelayTimer -= delta;
+                    if (this.initialDelayTimer <= 0) {
+                        this.phase = 'head';
+                        this.progress = 0;
+                    }
+                    return;
+                }
+
+                // Handle pause
+                if (this.phase === 'pause') {
+                    this.pauseTimer -= delta;
+                    if (this.pauseTimer <= 0) {
+                        this.phase = 'head';
+                        this.progress = 0;
+                        this.direction *= -1;
+                    }
+                    return;
+                }
+
+                this.progress += delta * this.speed;
+
+                const totalPoints = this.allPoints.length;
+                let startIndex, endIndex;
+
+                if (this.progress >= 1) {
+                    if (this.phase === 'head') {
+                        this.phase = 'tail';
+                        this.progress = 0;
+                    } else {
+                        this.phase = 'pause';
+                        this.pauseTimer = this.pauseDuration;
+                        return;
+                    }
+                }
+
+                // Smoother index calculation
+                const currentProgress = Math.min(this.progress, 1);
+
+                if (this.direction === 1) {
+                    if (this.phase === 'head') {
+                        startIndex = 0;
+                        endIndex = Math.max(2, Math.ceil(currentProgress * (totalPoints - 1)));
+                    } else {
+                        startIndex = Math.max(0, Math.floor(currentProgress * (totalPoints - 1)));
+                        endIndex = totalPoints - 1;
+                    }
+                } else {
+                    if (this.phase === 'head') {
+                        startIndex = Math.max(0, totalPoints - 1 - Math.ceil(currentProgress * (totalPoints - 1)));
+                        endIndex = totalPoints - 1;
+                    } else {
+                        startIndex = 0;
+                        endIndex = Math.max(2, totalPoints - 1 - Math.floor(currentProgress * (totalPoints - 1)));
+                    }
+                }
+
+                // Ensure valid range
+                startIndex = Math.max(0, Math.min(startIndex, totalPoints - 1));
+                endIndex = Math.max(startIndex + 1, Math.min(endIndex, totalPoints - 1));
+
+                const visiblePoints = this.allPoints.slice(startIndex, endIndex + 1);
+                if (visiblePoints.length >= 2) {
+                    this.updateLineGeometry(visiblePoints);
+                }
+            }
+
+            updateLineGeometry(points) {
+                this.line.geometry.dispose();
+                this.line.geometry = new THREE.BufferGeometry().setFromPoints(points);
+            }
+        }
+
+        // Create flight paths with randomized timing
+        const flightPaths = flightRoutes.map(route => {
+            return new FlightPath(
+                route.from,
+                route.to,
+                route.color,
+                Math.random() * 5,
+                0.3 + Math.random() * 1.2,
+                0.3 + Math.random() * 0.3
+            );
+        });
+
+        // Animation loop
+        const clock = new THREE.Clock();
+        const rotationSpeed = 0.002;
+        let autoRotate = true;
+
+        // Mouse drag controls
+        let isDragging = false;
+        let previousMousePosition = { x: 0, y: 0 };
+
+        // Use window-level event listeners for more reliable capture
+        let isOverCanvas = false;
+
+        // Track mouse position to detect if over canvas and handle dragging
+        window.addEventListener('mousemove', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            const wasOverCanvas = isOverCanvas;
+            isOverCanvas = (
+                e.clientX >= rect.left &&
+                e.clientX <= rect.right &&
+                e.clientY >= rect.top &&
+                e.clientY <= rect.bottom
+            );
+
+            // Update cursor based on hover state
+            if (isOverCanvas && !wasOverCanvas && !isDragging) {
+                console.log('Entered canvas area - adding grab cursor');
+                canvas.classList.add('grab-cursor');
+            } else if (!isOverCanvas && wasOverCanvas) {
+                console.log('Left canvas area - removing cursors');
+                canvas.classList.remove('grab-cursor');
+                canvas.classList.remove('grabbing-cursor');
+                if (isDragging) {
+                    isDragging = false;
+                    autoRotate = true;
+                }
+            }
+
+            // Handle dragging
+            if (isDragging) {
+                e.preventDefault();
+
+                const deltaMove = {
+                    x: e.clientX - previousMousePosition.x,
+                    y: e.clientY - previousMousePosition.y
+                };
+
+                // Rotate earth based on mouse movement
+                earthGroup.rotation.y += deltaMove.x * 0.005;
+                earthGroup.rotation.x += deltaMove.y * 0.005;
+
+                // Clamp vertical rotation to prevent flipping
+                earthGroup.rotation.x = Math.max(-Math.PI / 4, Math.min(Math.PI / 4, earthGroup.rotation.x));
+
+                previousMousePosition = {
+                    x: e.clientX,
+                    y: e.clientY
+                };
+            }
+        });
+
+        window.addEventListener('mousedown', (e) => {
+            if (!isOverCanvas) return;
+            e.preventDefault();
+            console.log('Mouse down - starting drag');
+            isDragging = true;
+            autoRotate = false;
+            previousMousePosition = {
+                x: e.clientX,
+                y: e.clientY
+            };
+            canvas.classList.remove('grab-cursor');
+            canvas.classList.add('grabbing-cursor');
+        });
+
+        window.addEventListener('mouseup', () => {
+            if (!isDragging) return;
+            console.log('Mouse up - ending drag');
+            isDragging = false;
+            autoRotate = true;
+            canvas.classList.remove('grabbing-cursor');
+            if (isOverCanvas) {
+                canvas.classList.add('grab-cursor');
+            }
+        });
+
+        console.log('Canvas element:', canvas);
+        console.log('Canvas ready');
+
+        function animate() {
+            requestAnimationFrame(animate);
+
+            const delta = clock.getDelta();
+
+            // Rotate earth only when not dragging
+            if (autoRotate) {
+                earthGroup.rotation.y += rotationSpeed;
+            }
+
+            // Update flight paths
+            flightPaths.forEach(path => path.update(delta));
+
+            renderer.render(scene, camera);
+        }
+
+        animate();
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // Example: Change earth position (you can call this function to switch positions)
+        window.setEarthPosition = function(position) {
+            const container = document.querySelector('.earth3d-container');
+            container.className = `earth3d-container earth3d-${position}`;
+
+            if (position === 'right') {
+                earthGroup.position.set(0, -8, 0);
+            } else {
+                earthGroup.position.set(0, -9, 0);
+            }
+        };
+    </script>
+</body>
+</html>
